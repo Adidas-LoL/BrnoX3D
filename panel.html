@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Boční panel</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Boční panel */
+        .sidebar {
+            width: 300px;
+            height: 100vh;
+            background: #fff;
+            position: fixed;
+            top: 0;
+            left: -300px; /* Skrytý panel */
+            transition: left 0.3s ease-in-out;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
+            padding: 20px;
+        }
+
+        /* Tlačítko pro vysunutí */
+        .toggle-btn {
+            position: absolute;
+            top: 50%;
+            left: 100%;
+            width: 40px;
+            height: 40px;
+            background: white;
+            border: 2px solid #ccc;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .toggle-btn:hover {
+            background: #f0f0f0;
+        }
+
+        /* Šipka */
+        .toggle-btn i {
+            font-size: 18px;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        /* Když je panel otevřený */
+        .sidebar.open {
+            left: 0;
+        }
+
+        .sidebar.open .toggle-btn i {
+            transform: rotate(180deg);
+        }
+
+        /* Obsah panelu */
+        .content {
+            margin-top: 20px;
+        }
+
+        /* Tlačítka pro výběr míst mimo panel */
+        .place-btn {
+            display: block;
+            margin: 10px 0;
+            padding:10px;
+            background: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+            text-align: center;
+            border-radius: 5px;
+        }
+
+        .place-btn:hover {
+            background: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Tlačítka míst mimo panel -->
+    <button class="place-btn" onclick="openSidebarWithInfo('Místo 1', 'Toto je popis prvního místa.')">Místo 1</button>
+    <button class="place-btn" onclick="openSidebarWithInfo('Místo 2', 'Toto je popis druhého místa.')">Místo 2</button>
+
+    <!-- Boční panel -->
+    <div class="sidebar" id="sidebar">
+        <!-- Tlačítko pro vysunutí/skrytí -->
+        <div class="toggle-btn" id="toggle-btn">
+            <i>➤</i> <!-- Šipka -->
+        </div>
+        <h2>Informace</h2>
+        <p id="place-info">Klikni na místo pro zobrazení informací.</p>
+    </div>
+
+    <script>
+        const sidebar = document.getElementById("sidebar");
+        const toggleBtn = document.getElementById("toggle-btn");
+        const placeInfo = document.getElementById("place-info");
+        const arrow = toggleBtn.querySelector("i");
+
+        // Funkce pro otevření/zavření panelu
+        toggleBtn.addEventListener("click", () => {
+            sidebar.classList.toggle("open");
+
+            // Otočení šipky podle stavu panelu
+            if (sidebar.classList.contains("open")) {
+                arrow.style.transform = "rotate(180deg)";
+            } else {
+                arrow.style.transform = "rotate(0deg)";
+            }
+        });
+
+        // Funkce pro otevření panelu s informacemi o místě
+        function openSidebarWithInfo(title, description) {
+            placeInfo.innerHTML = `<strong>${title}</strong><br>${description}`;
+            sidebar.classList.add("open"); // Otevření panelu
+        }
+    </script>
+
+</body>
+</html>
+
+
+
