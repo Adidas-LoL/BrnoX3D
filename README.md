@@ -1,4 +1,4 @@
-main.html       -    hlavni stranka
+index.html       -    hlavni stranka
 
 main.css        -    css pro main stranku
 gallery.css     -    example css
