@@ -114,3 +114,21 @@ body {
 .onas-text { 
     text-align: center;
 }
+
+/*Galerie ---------------------------*/
+.Galerie {
+    margin-top: 70px;
+}
+.img {
+    max-height: 250px;
+    max-width: 300px;
+}
+table {
+    border-collapse: collapse; /* Sloučí hranice buněk */
+    margin: 0 auto; /* Zarovná tabulku na střed */
+}
+
+th, td {
+    padding: 5px; /* Odsazení v buňkách */
+    text-align: left; /* Zarovnání textu vlevo */
+}
