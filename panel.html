@@ -82,6 +82,7 @@
             background: #0056b3;
         }
     </style>
+    
 </head>
 <body>
 
@@ -98,7 +99,7 @@
         <h2>Informace</h2>
         <p id="place-info">Klikni na místo pro zobrazení informací.</p>
     </div>
-
+    
     <script>
         const sidebar = document.getElementById("sidebar");
         const toggleBtn = document.getElementById("toggle-btn");
@@ -122,6 +123,7 @@
             placeInfo.innerHTML = `<strong>${title}</strong><br>${description}`;
             sidebar.classList.add("open"); // Otevření panelu
         }
+        
     </script>
 
 </body>
