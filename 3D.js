@@ -2,6 +2,23 @@ import * as THREE from './three.js/build/three.module.js';
 import { OrbitControls } from './three.js/src/extras/OrbitControls.js';
 import { GLTFLoader } from './three.js/src/loaders/GLTFLoader.js';
 
+//=========================================================================================================================================================
+//==================================================================HTML FUNCTIONS======================================================================
+//=========================================================================================================================================================
+var resetCamera = true;
+
+/*function restartButton() {
+    resetCamera = false;  //sets variable that checks if the camera is locked or not
+
+};
+restartButton();*/
+
+
+
+//=========================================================================================================================================================
+//==================================================================ThreeJS FUNCTIONS===================================================================
+//=========================================================================================================================================================
+
 function main() {
 //camera
     const canvas = document.querySelector( '#c' );
@@ -15,17 +32,8 @@ function main() {
 	  camera.position.set( 0, 10, 20 );    camera.position.z = 2;
     const scene = new THREE.Scene();
     scene.background = new THREE.Color( 'cyan' );
-
-//box
-    const boxWidth = 1;
-    const boxHeight = 1;
-    const boxDepth = 1;
-    const geometry = new THREE.BoxGeometry(boxWidth, boxHeight, boxDepth);
-
-    const material = new THREE.MeshPhongMaterial({color: 0x44aa88});
-    const cube = new THREE.Mesh(geometry, material);
-    scene.add(cube);
     renderer.render(scene, camera);
+  
 //light
     const color = 0xFFFFFF;
     const intensity = 3;
@@ -36,29 +44,6 @@ function main() {
     const controls = new OrbitControls(camera, renderer.domElement);
 
 //instances
-  //floor
-    {
-      const planeSize = 40;
-  
-      const loader = new THREE.TextureLoader();
-      const texture = loader.load( 'https://threejs.org/manual/examples/resources/images/checker.png' );
-      texture.colorSpace = THREE.SRGBColorSpace;
-      texture.wrapS = THREE.RepeatWrapping;
-      texture.wrapT = THREE.RepeatWrapping;
-      texture.magFilter = THREE.NearestFilter;
-      const repeats = planeSize / 2;
-      texture.repeat.set( repeats, repeats );
-  
-      const planeGeo = new THREE.PlaneGeometry( planeSize, planeSize );
-      const planeMat = new THREE.MeshPhongMaterial( {
-        map: texture,
-        side: THREE.DoubleSide,
-      } );
-      const mesh = new THREE.Mesh( planeGeo, planeMat );
-      mesh.rotation.x = Math.PI * - .5;
-      scene.add( mesh );
-  
-    }
     //calculate camera fov
     function frameArea( sizeToFitOnScreen, boxSize, boxCenter, camera ) {
 
@@ -75,24 +60,31 @@ function main() {
   
       // pick some near and far values for the frustum that
       // will contain the box.
-      camera.near = boxSize / 100;
-      camera.far = boxSize * 100;
+      camera.near = boxSize / 1000;
+      camera.far = boxSize * 1000;
   
       camera.updateProjectionMatrix();
-  
-      // point the camera to look at the center of the box
-      camera.lookAt( boxCenter.x, boxCenter.y, boxCenter.z );
-  
     }
-    //map
+
+    function followCamera(obj){
+      camera.position.x = obj.position.x + 5;
+      camera.position.y = obj.position.y + 20;
+      camera.position.z = obj.position.z + 10;
+      camera.lookAt(obj.position);
+      console.log("test");
+    };
+  
+    //map-----------
+    //--------------
     {
       //load
     const gltfLoader = new GLTFLoader();
 		gltfLoader.load( './webmap.gltf', ( gltf ) => {
-		const root = gltf.scene;
-		scene.add( root )
-      //camera
-      const box = new THREE.Box3().setFromObject( root );
+		const map = gltf.scene;
+		scene.add( map )
+
+      //calculate camera fov, so it doesn't get buggy
+      const box = new THREE.Box3().setFromObject( map );
       const boxSize = box.getSize( new THREE.Vector3() ).length();
 			const boxCenter = box.getCenter( new THREE.Vector3() );
 
@@ -100,13 +92,109 @@ function main() {
 			frameArea( boxSize * 1.2, boxSize, boxCenter, camera );
 
 			// update the Trackball controls to handle the new size
-			controls.maxDistance = boxSize * 10;
+			controls.maxDistance = boxSize;
 			controls.target.copy( boxCenter );
 			controls.update();}
-    
-  );
+    )};
+
+  //car model
+  {
+  const gltfLoader = new GLTFLoader();
+		gltfLoader.load( './car.glb', ( gltf ) => {
+		const car = gltf.scene;
+    let size = 0.001;
+    car.scale.set(size, size, size);
+    car.position.y = 0.04;
+		scene.add( car )
+    console.log("Car rotation:", car.rotation);
+
+  //--------------------------------------------------------
+  //controls of car
+  //--------------------------------------------------------
+  let keysPressed = {};
+  let maxspeed = 0.25;
+  let acceleration = 0.005;  //  a
+  let deacceleration = 0.05; // -a
+  let velocity = 0;         // momentalni rychlost
+  const rotationSpeed = 0.087222; //rychlost otaceni (v radianech "3.14/36" )
+
+  document.addEventListener("keydown", function (event) {
+    keysPressed[event.key] = true;
+  });
   
-  };
+  document.addEventListener("keyup", function (event) {
+    keysPressed[event.key] = false;
+  });
+  
+  function updateCarPosition() { 
+    
+  
+    // Pohyb vpřed
+    if (keysPressed["w"]) {
+      if (velocity < maxspeed) {
+      velocity += acceleration;
+    }
+    }
+  
+    // Pohyb zpět
+    if (keysPressed["s"]) {
+      if (velocity > -maxspeed) {
+        velocity -= acceleration;
+      }
+    }
+    if (velocity > deacceleration || velocity < -deacceleration) { //checkuje jestli je mozne se otocit (aby se neotacel na miste)
+    // Otočení vpravo
+    if (keysPressed["d"]) {
+      car.rotation.y -= rotationSpeed;
+    }
+    
+    // Otočení vlevo
+    if (keysPressed["a"]) {
+      car.rotation.y += rotationSpeed;
+    }
+    };
+    //deakcelerace
+    if (!keysPressed["w"] && !keysPressed["s"]) {
+      if (velocity > 0) {
+        velocity -= deacceleration;
+        if (velocity < 0) velocity = 0;
+      };
+
+      if (velocity < 0) {
+        velocity += deacceleration;
+        if (velocity > 0) velocity = 0;
+      };
+    };
+    
+    car.position.x += velocity * Math.cos(car.rotation.y); //pocitani jak se auto pohybuje v souradnicovem prostoru
+    car.position.z -= velocity * Math.sin(car.rotation.y);
+    if (resetCamera === true) {
+      followCamera(car);
+    }
+  }
+  
+  function gameLoop() {
+    updateCarPosition();
+    requestAnimationFrame(gameLoop);
+    
+  }
+  gameLoop();
+
+  })};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 //canvas
     function resizeRendererToDisplaySize(renderer) {
         const canvas = renderer.domElement;
@@ -128,9 +216,6 @@ function main() {
           camera.aspect = canvas.clientWidth / canvas.clientHeight;
           camera.updateProjectionMatrix();
         }
-        
-        cube.rotation.x = time;
-        cube.rotation.y = time;
        
         renderer.render(scene, camera);
        
@@ -138,7 +223,9 @@ function main() {
       }
       requestAnimationFrame(render);
 
-      
+
+
 }
+
 
 main();
