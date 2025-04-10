@@ -168,9 +168,9 @@ function main() {
     
     car.position.x += velocity * Math.cos(car.rotation.y); //pocitani jak se auto pohybuje v souradnicovem prostoru
     car.position.z -= velocity * Math.sin(car.rotation.y);
-    if (resetCamera === true) {
+   /* if (resetCamera === true) {
       followCamera(car);
-    }
+    }*/
   }
   
   function gameLoop() {
