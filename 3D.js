@@ -1,12 +1,12 @@
 import * as THREE from './three.js/build/three.module.js';
 import { OrbitControls } from './three.js/src/extras/OrbitControls.js';
 import { GLTFLoader } from './three.js/src/loaders/GLTFLoader.js';
-
+//import * as CANNON from './cannoon/src/cannon.js';
 //=========================================================================================================================================================
 //==================================================================HTML FUNCTIONS======================================================================
 //=========================================================================================================================================================
 var resetCamera = true;
-
+let car = null;
 /*function restartButton() {
     resetCamera = false;  //sets variable that checks if the camera is locked or not
 
@@ -15,11 +15,23 @@ restartButton();*/
 
 
 
+
+
+
+
+function main() {
+//=========================================================================================================================================================
+//=================================================================CANNON JS FUNCTIONS==================================================================
+//=========================================================================================================================================================
+/*const world = new window.CANNON.World({
+  gravity: new window.CANNON.Vec3(0, -9.82, 0),
+});
+world.broadphase = new window.CANNON.NaiveBroadphase(); 
+world.solver.iterations = 10;*/
+
 //=========================================================================================================================================================
 //==================================================================ThreeJS FUNCTIONS===================================================================
 //=========================================================================================================================================================
-
-function main() {
 //camera
     const canvas = document.querySelector( '#c' );
 	  const renderer = new THREE.WebGLRenderer( { antialias: true, canvas } );
@@ -73,14 +85,17 @@ function main() {
       camera.lookAt(obj.position);
       console.log("test");
     };
-  
+    
     //map-----------
     //--------------
     {
       //load
     const gltfLoader = new GLTFLoader();
-		gltfLoader.load( './webmap.gltf', ( gltf ) => {
+		gltfLoader.load( './Brno3D.glb', ( gltf ) => {
 		const map = gltf.scene;
+    map.traverse((child) => {
+      console.log(child.name); // vypíše ti jména všech objektů
+  });
 		scene.add( map )
 
       //calculate camera fov, so it doesn't get buggy
@@ -96,18 +111,110 @@ function main() {
 			controls.target.copy( boxCenter );
 			controls.update();}
     )};
+    //map physics
+    /*const groundBody = new window.CANNON.Body({
+        mass: 0, // statické těleso (budovy a podlaha)
+        shape: new window.CANNON.Box(new window.CANNON.Vec3(50, 1, 50)), // orientační velikost mapy
+        position: new window.CANNON.Vec3(0, 0, 0),
+      });
+    world.addBody(groundBody);*/
 
-  //car model
+  //point class----------
+  //----------------
+  
+  //point variabley (pro pouziti v CSS, pro pridani definuj novy objekt pod class Checkpoint, MUSIS DAT 5 ATRIBUTU [x,y,z, nastav variable na true, nastav variable na false], jinak to crashne)
+  let variableA = false;
+  let variableB = false;
+  let variableC = false;
+
+
+  //----------------------------------------------------------
+  class Checkpoint {
+    constructor(x, y, z, onCollide, onExit) {
+
+      //spawn object-------------------
+      const geometry = new THREE.ConeGeometry(5, 30, 32);
+      const material = new THREE.MeshBasicMaterial({ color: 0xffff00, transparent: true, opacity: 0.5 });
+      this.mesh = new THREE.Mesh(geometry, material);
+      this.mesh.position.set(x, y, z);
+      scene.add(this.mesh);
+
+      //declare anonymous func---------
+      this.onCollide = onCollide
+      this.collided = false;
+      this.onExit = onExit;
+    }
+    
+    //check for collision--------------
+    checkCollision(target) {
+      //if (this.collided) return; 
+      const distance = target.position.distanceTo(this.mesh.position);
+      const collisionRadius = 10.5;
+      if (distance < collisionRadius) {
+        this.collided = true;
+        console.log("Worked!");
+        this.onCollide();
+
+      } else {
+
+        this.collided = false;
+        this.onExit();
+      }
+    }
+  }
+
+
+  let checkpoint1 = new Checkpoint(10, 0, 20, () => {
+    variableA = true;
+    console.log("Changed A")
+  }, () => {
+    variableA = false;
+  });
+  
+  let checkpoint2 = new Checkpoint(50, 0, -30, () => {
+    variableB = true;
+    console.log("Changed B")
+  }, () => {
+    variableB = false;
+  });
+  
+  let checkpoint3 = new Checkpoint(-15, 0, 60, () => {
+    variableC = true;
+    console.log("Changed C")
+  }, () => {
+    variableC = false;
+  });
+  //only one cone----------------
+  /*const coneGeometry = new THREE.ConeGeometry(5, 30, 32); // (polomer zakladu, vyska, segmenty)
+  const coneMaterial = new THREE.MeshBasicMaterial({ color: 0xffff00, transparent: true, opacity: 0.5 });
+  const cone = new THREE.Mesh(coneGeometry, coneMaterial);
+  scene.add(cone);
+  // cone (point1) position
+  cone.position.set(50, 0, -50);*/
+
+  
+
+  //car model-------
+  //----------------
   {
   const gltfLoader = new GLTFLoader();
-		gltfLoader.load( './car.glb', ( gltf ) => {
+		gltfLoader.load( './helicopter.glb', ( gltf ) => {
 		const car = gltf.scene;
-    let size = 0.001;
+    let size = 0.1;
     car.scale.set(size, size, size);
-    car.position.y = 0.04;
+    //car.position.y = 0.04;
+    car.position.y = 10;
 		scene.add( car )
     console.log("Car rotation:", car.rotation);
 
+
+  //car physics cannon js
+    /*const carBody = new window.CANNON.Body({
+      mass: 150, // váha auta
+      shape: new window.CANNON.Box(new window.CANNON.Vec3(0.5, 0.25, 1)), // odhadni tvar auta (poloviční rozměry)
+      position: new window.CANNON.Vec3(0, 0.5, 0), // startovní pozice
+    });
+    world.addBody(carBody);*/
   //--------------------------------------------------------
   //controls of car
   //--------------------------------------------------------
@@ -116,7 +223,7 @@ function main() {
   let acceleration = 0.005;  //  a
   let deacceleration = 0.05; // -a
   let velocity = 0;         // momentalni rychlost
-  const rotationSpeed = 0.087222; //rychlost otaceni (v radianech "3.14/36" )
+  const rotationSpeed = 0.05; //rychlost otaceni (v radianech "3.14/36" )
 
   document.addEventListener("keydown", function (event) {
     keysPressed[event.key] = true;
@@ -130,19 +237,19 @@ function main() {
     
   
     // Pohyb vpřed
-    if (keysPressed["w"]) {
+    if (keysPressed["s"]) {
       if (velocity < maxspeed) {
       velocity += acceleration;
     }
     }
   
     // Pohyb zpět
-    if (keysPressed["s"]) {
+    if (keysPressed["w"]) {
       if (velocity > -maxspeed) {
         velocity -= acceleration;
       }
     }
-    if (velocity > deacceleration || velocity < -deacceleration) { //checkuje jestli je mozne se otocit (aby se neotacel na miste)
+    //if (velocity > deacceleration || velocity < -deacceleration) { //checkuje jestli je mozne se otocit (aby se neotacel na miste)
     // Otočení vpravo
     if (keysPressed["d"]) {
       car.rotation.y -= rotationSpeed;
@@ -152,7 +259,7 @@ function main() {
     if (keysPressed["a"]) {
       car.rotation.y += rotationSpeed;
     }
-    };
+    //};
     //deakcelerace
     if (!keysPressed["w"] && !keysPressed["s"]) {
       if (velocity > 0) {
@@ -168,11 +275,25 @@ function main() {
     
     car.position.x += velocity * Math.cos(car.rotation.y); //pocitani jak se auto pohybuje v souradnicovem prostoru
     car.position.z -= velocity * Math.sin(car.rotation.y);
-   /* if (resetCamera === true) {
-      followCamera(car);
-    }*/
-  }
   
+    //helicopter tilt
+    const targetTilt = velocity * 2.5;
+    car.rotation.z -= (targetTilt + car.rotation.z) * 0.1;
+  // -----------------------------
+    // Kamera sleduje auto
+    camera.position.x = car.position.x + 5;
+    camera.position.y = car.position.y + 15;
+    camera.position.z = car.position.z + 30;
+    camera.lookAt(car.position);
+    //checkovani kolizi s pointy
+    checkpoint1.checkCollision(car);
+    checkpoint2.checkCollision(car);
+    checkpoint3.checkCollision(car);
+  }
+
+
+
+
   function gameLoop() {
     updateCarPosition();
     requestAnimationFrame(gameLoop);
@@ -185,15 +306,7 @@ function main() {
 
 
 
-
-
-
-
-
-
-
-
-
+  
 
 //canvas
     function resizeRendererToDisplaySize(renderer) {
@@ -216,7 +329,7 @@ function main() {
           camera.aspect = canvas.clientWidth / canvas.clientHeight;
           camera.updateProjectionMatrix();
         }
-       
+
         renderer.render(scene, camera);
        
         requestAnimationFrame(render);
