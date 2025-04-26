@@ -117,7 +117,7 @@ body {
 
 /*Galerie ---------------------------*/
 .Galerie {
-    margin-top: 100px;
+    
 }
 .img {
     max-height: 250px;
@@ -126,6 +126,7 @@ body {
 table {
     border-collapse: collapse; /* Sloučí hranice buněk */
     margin: 0 auto; /* Zarovná tabulku na střed */
+    margin-top: 100px;
 }
 
 th, td {
