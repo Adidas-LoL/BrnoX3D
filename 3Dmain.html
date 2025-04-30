@@ -5,11 +5,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cejl</title>
     <link rel="stylesheet" href="3D.css">
+    <link rel="preload" as="image" href="./image/Sidebar/radost.png">
+    <link rel="preload" as="image" href="./image/Sidebar/albert.png">
+    <link rel="preload" as="image" href="./image/Sidebar/kaznice.png">
     <script type="importmap"></script>
 </head>
 <body>
+    <div id="UI">
+    <!-- Tlačítka míst mimo panel -->
+
+    <!-- Boční panel -->
+    <div class="sidebar" id="sidebar">
+        <!-- Tlačítko pro vysunutí/skrytí -->
+        <div class="toggle-btn" id="toggle-btn">
+            <i>➤</i> <!-- Šipka -->
+        </div>
+        <h2>Informace</h2>
+        <p id="place-info">Klikni na místo pro zobrazení informací.</p>
+        <a href="./image/Sidebar/radost.png" target="_blank"><img src="./image/Sidebar/radost.png" id="sideimage"></a>
+        <button class="place-btn" onclick="openSidebarWithInfo('Místo 1', 'Toto je popis prvního místa.')">Místo 1</button>
+        <button class="place-btn" onclick="openSidebarWithInfo('Místo 2', 'Toto je popis druhého místa.')">Místo 2</button>
+    </div>
+    </div>
     <canvas id="c"></canvas>
 </body>
-<script type="module" src="3D.js">
-</script>
+<script type="module" src="3D.js"></script>
 </html>
