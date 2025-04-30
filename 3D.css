@@ -1,12 +1,109 @@
 body {
     width: 100vh;
     height: 100vw;
+    overflow-y: hidden;
 }
 #c {
     position: absolute;
-    transform: translateX(-50%);
-    left: 50vw;
+    /*transform: translateX(-50%);
+    left: 50vw;*/
     height: 100%;
     display: block;
     width: 100%;
+    z-index: 1;
+   
+}
+/*#resButton {
+    text-align: right;
+}
+
+#resButton button {
+    font-size: 25px;
+    color: #fff;
+    position: absolute;
+    z-index: 2;
+    height: 50px;
+    background-color: #1b1a1d;
+    box-shadow: 5px, 10px;
+    border-radius: 15px;
+}*/
+
+/* Boční panel */
+#UI {
+    z-index: 1000;
+    position: relative;
+}
+.sidebar {
+    width: 300px;
+    height: 100vh;
+    background: #fff;
+    position: fixed;
+    top: 0;
+    left: -300px; /* Skrytý panel */
+    transition: left 0.3s ease-in-out;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+}
+#sideimage {
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
+    justify-content: center;
+    width: 100%;
+    overflow-x: hidden;
+}
+/* Tlačítko pro vysunutí */
+.toggle-btn {
+    position: absolute;
+    top: 50%;
+    left: 100%;
+    width: 40px;
+    height: 40px;
+    background: white;
+    border: 2px solid #ccc;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: transform 0.3s ease-in-out;
+}
+
+.toggle-btn:hover {
+    background: #f0f0f0;
+}
+
+/* Šipka */
+.toggle-btn i {
+    font-size: 18px;
+    transition: transform 0.3s ease-in-out;
+}
+
+/* Když je panel otevřený */
+.sidebar.open {
+    left: 0;
+}
+
+.sidebar.open .toggle-btn i {
+    transform: rotate(180deg);
+}
+
+/* Obsah panelu */
+.content {
+    margin-top: 20px;
+}
+
+/* Tlačítka pro výběr míst mimo panel */
+.place-btn {
+    display: block;
+    margin: 10px 0;
+    padding:10px;
+    background: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+    text-align: center;
+    border-radius: 5px;
+}
+
+.place-btn:hover {
+    background: #0056b3;
 }
