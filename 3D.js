@@ -5,24 +5,47 @@ import { GLTFLoader } from './three.js/src/loaders/GLTFLoader.js';
 //=========================================================================================================================================================
 //==================================================================HTML FUNCTIONS======================================================================
 //=========================================================================================================================================================
-var resetCamera = true;
-let car = null;
+        const sidebar = document.getElementById("sidebar");
+        const toggleBtn = document.getElementById("toggle-btn");
+        const placeInfo = document.getElementById("place-info");
+        const arrow = toggleBtn.querySelector("i");
+
+        // Funkce pro otevření/zavření panelu
+        toggleBtn.addEventListener("click", opensidebar);
+
+        document.addEventListener('keydown', function(event) {
+          //detekce stisknutí ,,E"
+          if (event.key === 'e' || event.key === 'E') {
+            opensidebar();
+           }
+          });
+
+        function opensidebar() {
+            sidebar.classList.toggle("open");
+
+            // Otočení šipky podle stavu panelu
+            if (sidebar.classList.contains("open")) {
+                arrow.style.transform = "rotate(180deg)";
+            } else {
+                arrow.style.transform = "rotate(0deg)";
+            }
+        };
+
+       // Funkce pro otevření panelu s informacemi o místě
+        function openSidebarWithInfo(title, description) {
+            placeInfo.innerHTML = `<strong>${title}</strong><br>${description}`;
+            sidebar.classList.add("open"); // Otevření panelu
+        }
+
+//var resetCamera = true;
+
 /*function restartButton() {
     resetCamera = false;  //sets variable that checks if the camera is locked or not
-
 };
 restartButton();*/
 
 
-
-
-
-
-
-function main() {
-//=========================================================================================================================================================
 //=================================================================CANNON JS FUNCTIONS==================================================================
-//=========================================================================================================================================================
 /*const world = new window.CANNON.World({
   gravity: new window.CANNON.Vec3(0, -9.82, 0),
 });
@@ -32,7 +55,12 @@ world.solver.iterations = 10;*/
 //=========================================================================================================================================================
 //==================================================================ThreeJS FUNCTIONS===================================================================
 //=========================================================================================================================================================
+let car = null;
+let E = null;
+function main() {
 //camera
+
+
     const canvas = document.querySelector( '#c' );
 	  const renderer = new THREE.WebGLRenderer( { antialias: true, canvas } );
 
@@ -133,11 +161,14 @@ world.solver.iterations = 10;*/
     constructor(x, y, z, onCollide, onExit) {
 
       //spawn object-------------------
-      const geometry = new THREE.ConeGeometry(5, 30, 32);
-      const material = new THREE.MeshBasicMaterial({ color: 0xffff00, transparent: true, opacity: 0.5 });
-      this.mesh = new THREE.Mesh(geometry, material);
+      const gltfLoader = new GLTFLoader();
+		  gltfLoader.load( './pin.glb', ( gltf ) => {
+		  this.mesh = gltf.scene;
+      let size = 20;
+      this.mesh.scale.set(size, size, size);
       this.mesh.position.set(x, y, z);
-      scene.add(this.mesh);
+		  scene.add( this.mesh )
+      });
 
       //declare anonymous func---------
       this.onCollide = onCollide
@@ -149,12 +180,14 @@ world.solver.iterations = 10;*/
     checkCollision(target) {
       //if (this.collided) return; 
       const distance = target.position.distanceTo(this.mesh.position);
-      const collisionRadius = 10.5;
+      const collisionRadius = 15.5;
       if (distance < collisionRadius) {
         this.collided = true;
-        console.log("Worked!");
         this.onCollide();
-
+        if (E) {
+          E.visible = true;
+          E.position.set(this.mesh.position.x, 15, this.mesh.position.z);
+        }
       } else {
 
         this.collided = false;
@@ -166,21 +199,22 @@ world.solver.iterations = 10;*/
 
   let checkpoint1 = new Checkpoint(10, 0, 20, () => {
     variableA = true;
-    console.log("Changed A")
+    //console.log("Changed A")
   }, () => {
     variableA = false;
+    if (E) E.visible = false;
   });
   
   let checkpoint2 = new Checkpoint(50, 0, -30, () => {
     variableB = true;
-    console.log("Changed B")
+    //console.log("Changed B")
   }, () => {
     variableB = false;
   });
   
   let checkpoint3 = new Checkpoint(-15, 0, 60, () => {
     variableC = true;
-    console.log("Changed C")
+    //console.log("Changed C")
   }, () => {
     variableC = false;
   });
@@ -192,7 +226,33 @@ world.solver.iterations = 10;*/
   // cone (point1) position
   cone.position.set(50, 0, -50);*/
 
-  
+
+  //E model-------
+  //----------------
+  {
+  const gltfLoader = new GLTFLoader();
+		gltfLoader.load( './E.glb', ( gltf ) => {
+		E = gltf.scene;
+    let size = 0.5;
+    E.scale.set(size, size, size);
+    //car.position.y = 0.04;
+    E.position.y = 10;
+    E.visible = false;
+		scene.add( E )
+    
+    })};
+
+    // Spin E towards heilcopter
+  function Espin(spinobj,target){
+      const direction = new THREE.Vector3();
+      direction.subVectors(target.position, spinobj.position);
+      direction.y = 0; 
+      direction.normalize();
+
+      const targetQuaternion = new THREE.Quaternion();
+      targetQuaternion.setFromUnitVectors(new THREE.Vector3(0, 0, 1), direction);
+      spinobj.quaternion.slerp(targetQuaternion, 0.1);
+      };
 
   //car model-------
   //----------------
@@ -280,7 +340,7 @@ world.solver.iterations = 10;*/
     const targetTilt = velocity * 2.5;
     car.rotation.z -= (targetTilt + car.rotation.z) * 0.1;
   // -----------------------------
-    // Kamera sleduje auto
+    // camera follow
     camera.position.x = car.position.x + 5;
     camera.position.y = car.position.y + 15;
     camera.position.z = car.position.z + 30;
@@ -289,6 +349,7 @@ world.solver.iterations = 10;*/
     checkpoint1.checkCollision(car);
     checkpoint2.checkCollision(car);
     checkpoint3.checkCollision(car);
+    if(E!==null && E.visible && car)  {Espin(E, car)}; //spin E towards helicopter
   }
 
 
@@ -329,6 +390,7 @@ world.solver.iterations = 10;*/
           camera.aspect = canvas.clientWidth / canvas.clientHeight;
           camera.updateProjectionMatrix();
         }
+
 
         renderer.render(scene, camera);
        
