@@ -20,14 +20,24 @@
         <div class="toggle-btn" id="toggle-btn">
             <i>➤</i> <!-- Šipka -->
         </div>
-        <h2>Informace</h2>
-        <p id="place-info">Klikni na místo pro zobrazení informací.</p>
+        <h2 id="Title">BrnoX3D</h2>
+        
         <a href="./image/Sidebar/radost.png" target="_blank"><img src="./image/Sidebar/radost.png" id="sideimage"></a>
-        <button class="place-btn" onclick="openSidebarWithInfo('Místo 1', 'Toto je popis prvního místa.')">Místo 1</button>
-        <button class="place-btn" onclick="openSidebarWithInfo('Místo 2', 'Toto je popis druhého místa.')">Místo 2</button>
+        <p class="place-btn" onclick="openSidebarWithInfo('Radost', 'Brňenská Káznice, vystavena jako vězení byla poprvé užita jako sirotčinec. vystavena roku 1778 její originální důvod výstavby bylo nařízení dvorského dekretu aby morava měla káznicy. Roku 1784 byl sirotčinec zrušen a káznice byla užita jako věznice pro nezletilé a byla užívána jako věznice až do sametové revoluce. Mezi roky 2006-2018 byla budova prázdná a neužitá ale už od roku 2006 byly plány ji přestavět na Divadlo, roku 2012 vyl zorganizován pouliční ghettofest v blízkostvi káznice která se stala pro ghettofest zázemí pro eventy což zvýšilo zájem o budovu. Od roku 2018 je káznice užívaná jako dnes, stávající se cejlským centrem kultůry.')"> Popisek</p>
+        <a class="place-btn" target="_blank" href="https://divadlo-radost.cz/">Odkaz na stránky</a>
+        <p id="place-info"></p>
     </div>
     </div>
     <canvas id="c"></canvas>
 </body>
 <script type="module" src="3D.js"></script>
+<script>
+    const placeInfo = document.getElementById("place-info");
+    const sidebar = document.getElementById("sidebar");
+    // Funkce pro otevření panelu s informacemi o místě
+    function openSidebarWithInfo(title, description) {
+        placeInfo.innerHTML = `<strong>${title}</strong><br>${description}`;
+        sidebar.classList.add("open"); // Otevření panelu
+    }
+</script>
 </html>
