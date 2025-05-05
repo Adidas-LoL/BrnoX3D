@@ -39,7 +39,7 @@ body {
     background: #fff;
     position: fixed;
     top: 0;
-    left: -300px; /* Skrytý panel */
+    left: -340px; /* Skrytý panel */
     transition: left 0.3s ease-in-out;
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
     padding: 20px;
@@ -95,7 +95,9 @@ body {
 .place-btn {
     display: block;
     margin: 10px 0;
-    padding:10px;
+    padding: 10px;
+    width: 100%;
+    max-width: 90%;
     background: #007bff;
     color: white;
     border: none;
@@ -106,4 +108,17 @@ body {
 
 .place-btn:hover {
     background: #0056b3;
+}
+#place-info {
+    display: block;
+    margin: 10px 0;
+    padding: 10px;
+    width: 100%;
+    max-width: 90%;
+    background: #b4b4b4;
+    color: white;
+    border: none;
+    text-align: left;
+    border-radius: 5px;
+    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.2);
 }
