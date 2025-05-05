@@ -31,18 +31,36 @@
     <img src="image\parralax\4_92.png" id="para4" data-speed="1.0">
     <img src="image\parralax\5.png" id="para5" data-speed="1.2">
     <img src="image\parralax\6.png" id="para6" data-speed="1.4">
+    <!--Mapa------------------------------------------------------------------------->
+<div class="Mapa" id="Mapa">
+    <a href="http://127.0.0.1:5500/3Dmain.html" target="_blank"><img src="./image/mapa.png" id="mapImage"></a>
+</div>
 </section>
 
-<!--Mapa------------------------------------------------------------------------->
-<div class="Mapa" id="Mapa">
-    <a href="http://127.0.0.1:5500/3Dmain.html"><img src=""></a>
-    <a href="3Dmain.html" target="_self" id="point1"><img src=""></a>
-    <a href="" target="_self" id="point2"><img src=""></a>
-    <a href="" target="_self" id="point3"><img src=""></a>
-</div>
+
 
 <!--Zahlavi---------------------------------------------------------------------->
 
 </body>
 <script src="main.js"></script>
+<script>
+    //-------------------------------------------------------
+//mapa
+//-------------------------------------------------------
+document.getElementById('mapImage').addEventListener('click', function(event) {
+    const img = event.target;
+    const rect = img.getBoundingClientRect();
+
+    const clickX = event.clientX - rect.left;
+    const clickY = event.clientY - rect.top;
+    
+    // Přepočet na souřadnice vůči středu obrázku
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
+
+    const relativeX = Math.round(clickX - centerX);
+    const relativeY = Math.round(centerY - clickY); // y osa obráceně (nahoru je plus)
+    window.location.href = `3Dmain.html?x=${relativeX}&y=${relativeY}`;
+});
+</script>
 </html>
