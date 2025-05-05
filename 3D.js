@@ -1,13 +1,13 @@
 import * as THREE from './three.js/build/three.module.js';
 import { OrbitControls } from './three.js/src/extras/OrbitControls.js';
 import { GLTFLoader } from './three.js/src/loaders/GLTFLoader.js';
+import { AnimationMixer } from './three.js/src/animation/AnimationMixer.js';
 //import * as CANNON from './cannoon/src/cannon.js';
 //=========================================================================================================================================================
 //==================================================================HTML FUNCTIONS======================================================================
 //=========================================================================================================================================================
         const sidebar = document.getElementById("sidebar");
         const toggleBtn = document.getElementById("toggle-btn");
-        const placeInfo = document.getElementById("place-info");
         const arrow = toggleBtn.querySelector("i");
 
         // Funkce pro otevření/zavření panelu
@@ -30,20 +30,20 @@ import { GLTFLoader } from './three.js/src/loaders/GLTFLoader.js';
                 arrow.style.transform = "rotate(0deg)";
             }
         };
-
-       // Funkce pro otevření panelu s informacemi o místě
-        function openSidebarWithInfo(title, description) {
-            placeInfo.innerHTML = `<strong>${title}</strong><br>${description}`;
-            sidebar.classList.add("open"); // Otevření panelu
-        }
-
+        
 //var resetCamera = true;
 
 /*function restartButton() {
     resetCamera = false;  //sets variable that checks if the camera is locked or not
 };
 restartButton();*/
-
+function startcoords(type) {
+  const params = new URLSearchParams(window.location.search);
+  const x = parseInt(params.get('x')) || 0;
+  const y = parseInt(params.get('y')) || 0;
+  if (type === "x"){return x};
+  if (type === "y"){return y};
+}
 
 //=================================================================CANNON JS FUNCTIONS==================================================================
 /*const world = new window.CANNON.World({
@@ -57,6 +57,13 @@ world.solver.iterations = 10;*/
 //=========================================================================================================================================================
 let car = null;
 let E = null;
+const clock = new THREE.Clock();
+let mixer;
+
+let currentime = performance.now();
+let previoustime = currentime;
+let deltaTime = 0;
+
 function main() {
 //camera
 
@@ -111,7 +118,7 @@ function main() {
       camera.position.y = obj.position.y + 20;
       camera.position.z = obj.position.z + 10;
       camera.lookAt(obj.position);
-      console.log("test");
+      //console.log("test");
     };
     
     //map-----------
@@ -121,9 +128,6 @@ function main() {
     const gltfLoader = new GLTFLoader();
 		gltfLoader.load( './Brno3D.glb', ( gltf ) => {
 		const map = gltf.scene;
-    map.traverse((child) => {
-      console.log(child.name); // vypíše ti jména všech objektů
-  });
 		scene.add( map )
 
       //calculate camera fov, so it doesn't get buggy
@@ -151,9 +155,9 @@ function main() {
   //----------------
   
   //point variabley (pro pouziti v CSS, pro pridani definuj novy objekt pod class Checkpoint, MUSIS DAT 5 ATRIBUTU [x,y,z, nastav variable na true, nastav variable na false], jinak to crashne)
-  let variableA = false;
-  let variableB = false;
-  let variableC = false;
+  let radost = false;
+  let albert = false;
+  let kaznice = false;
 
 
   //----------------------------------------------------------
@@ -180,7 +184,8 @@ function main() {
     checkCollision(target) {
       //if (this.collided) return; 
       const distance = target.position.distanceTo(this.mesh.position);
-      const collisionRadius = 15.5;
+      const collisionRadius = 16;
+      let uploadContent = false;
       if (distance < collisionRadius) {
         this.collided = true;
         this.onCollide();
@@ -188,8 +193,10 @@ function main() {
           E.visible = true;
           E.position.set(this.mesh.position.x, 15, this.mesh.position.z);
         }
+        if (this.uploadContent === false) { loadcontent(); };
+        this.uploadContent = true;
       } else {
-
+        this.uploadContent = false;
         this.collided = false;
         this.onExit();
       }
@@ -197,27 +204,39 @@ function main() {
   }
 
 
-  let checkpoint1 = new Checkpoint(10, 0, 20, () => {
-    variableA = true;
+  let checkpoint1 = new Checkpoint(-13, 0, -27, () => {
+    radost = true;
     //console.log("Changed A")
   }, () => {
-    variableA = false;
+    radost = false;
     if (E) E.visible = false;
   });
   
-  let checkpoint2 = new Checkpoint(50, 0, -30, () => {
-    variableB = true;
+  let checkpoint2 = new Checkpoint(80, 0, -57, () => {
+    albert = true;
     //console.log("Changed B")
   }, () => {
-    variableB = false;
+    albert = false;
   });
   
-  let checkpoint3 = new Checkpoint(-15, 0, 60, () => {
-    variableC = true;
+  let checkpoint3 = new Checkpoint(28, 0, -50, () => {
+    kaznice = true;
     //console.log("Changed C")
   }, () => {
-    variableC = false;
+    kaznice = false;
   });
+
+
+  //loads content to the sidebar
+  function loadcontent(){
+    let img = document.getElementById("sideimage");
+    let Title = document.getElementById("Title");
+    //console.log(img);
+    if(img !== null) {
+    if (radost === true){Title.textContent = "Divadlo Radost"; img.src = "./image/Sidebar/radost.png"};
+    if (albert === true){Title.textContent = "Supermarket Albert";img.src = "./image/Sidebar/albert.png"};
+    if (kaznice === true){Title.textContent = "Cejl kaznice";img.src = "./image/Sidebar/kaznice.png"};
+  }};
   //only one cone----------------
   /*const coneGeometry = new THREE.ConeGeometry(5, 30, 32); // (polomer zakladu, vyska, segmenty)
   const coneMaterial = new THREE.MeshBasicMaterial({ color: 0xffff00, transparent: true, opacity: 0.5 });
@@ -264,9 +283,18 @@ function main() {
     car.scale.set(size, size, size);
     //car.position.y = 0.04;
     car.position.y = 10;
-		scene.add( car )
+    car.position.x = startcoords("x");
+    //car.position.z = startcoords("y");
+		scene.add( car );
+    console.log("car position", car.position);
     console.log("Car rotation:", car.rotation);
+    
 
+    //animation of car
+    mixer = new AnimationMixer(car);
+    const clip = THREE.AnimationClip.findByName(gltf.animations, 'Main');
+    const action = mixer.clipAction(clip);
+    action.play();
 
   //car physics cannon js
     /*const carBody = new window.CANNON.Body({
@@ -279,9 +307,9 @@ function main() {
   //controls of car
   //--------------------------------------------------------
   let keysPressed = {};
-  let maxspeed = 0.25;
-  let acceleration = 0.005;  //  a
-  let deacceleration = 0.05; // -a
+  const maxspeed = 0.25;
+  const acceleration = 0.005;  //  a
+  const deacceleration = 0.05; // -a
   let velocity = 0;         // momentalni rychlost
   const rotationSpeed = 0.05; //rychlost otaceni (v radianech "3.14/36" )
 
@@ -293,7 +321,7 @@ function main() {
     keysPressed[event.key] = false;
   });
   
-  function updateCarPosition() { 
+  function updateCarPosition(delta) { 
     
   
     // Pohyb vpřed
@@ -312,12 +340,12 @@ function main() {
     //if (velocity > deacceleration || velocity < -deacceleration) { //checkuje jestli je mozne se otocit (aby se neotacel na miste)
     // Otočení vpravo
     if (keysPressed["d"]) {
-      car.rotation.y -= rotationSpeed;
+      car.rotation.y -= rotationSpeed * delta;
     }
     
     // Otočení vlevo
     if (keysPressed["a"]) {
-      car.rotation.y += rotationSpeed;
+      car.rotation.y += rotationSpeed * delta;
     }
     //};
     //deakcelerace
@@ -333,11 +361,11 @@ function main() {
       };
     };
     
-    car.position.x += velocity * Math.cos(car.rotation.y); //pocitani jak se auto pohybuje v souradnicovem prostoru
-    car.position.z -= velocity * Math.sin(car.rotation.y);
+    car.position.x += velocity * Math.cos(car.rotation.y) * delta; //pocitani jak se auto pohybuje v souradnicovem prostoru
+    car.position.z -= velocity * Math.sin(car.rotation.y) * delta;
   
     //helicopter tilt
-    const targetTilt = velocity * 2.5;
+    let targetTilt = velocity * 2.5;
     car.rotation.z -= (targetTilt + car.rotation.z) * 0.1;
   // -----------------------------
     // camera follow
@@ -350,13 +378,18 @@ function main() {
     checkpoint2.checkCollision(car);
     checkpoint3.checkCollision(car);
     if(E!==null && E.visible && car)  {Espin(E, car)}; //spin E towards helicopter
+    //console.log(car.position)
   }
 
 
 
 
   function gameLoop() {
-    updateCarPosition();
+    currentime = performance.now();
+    deltaTime = (currentime - previoustime)/10;
+    //console.log(deltaTime);
+    updateCarPosition(deltaTime);
+    previoustime = currentime;
     requestAnimationFrame(gameLoop);
     
   }
@@ -384,13 +417,18 @@ function main() {
 
     function render(time) {
         time *= 0.001;  // convert time to seconds
+        const deltaTime = clock.getDelta();
 
         if (resizeRendererToDisplaySize(renderer)) {
           const canvas = renderer.domElement;
           camera.aspect = canvas.clientWidth / canvas.clientHeight;
           camera.updateProjectionMatrix();
         }
-
+        
+        //animation check and loop
+        if (mixer) {
+          mixer.update(deltaTime);
+        }
 
         renderer.render(scene, camera);
        
