@@ -55,3 +55,10 @@ document.addEventListener("click", function(event) {
         menu.classList.remove("active");
     }
 });
+// o nas
+document.querySelectorAll('.shape').forEach(shape => {
+    shape.addEventListener('click', () => {
+      shape.classList.toggle('active');
+    });
+  });
+  
