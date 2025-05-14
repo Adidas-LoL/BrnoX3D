@@ -144,7 +144,7 @@ th, td {
 }
 
 .Galerie {
-    margin: 50px auto 0 auto; /* Horní odsazení 50px */
+    margin: 100px auto 0 auto; /* Horní odsazení 50px */
     padding: 0 20px;                   /* Okraje galerie od okrajů obrazovky */
     max-width: none;
     width: 100vw;
