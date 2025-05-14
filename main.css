@@ -133,7 +133,7 @@ body {
 
 table {
     border-collapse: collapse;         /* Sloučí hranice buněk */
-    margin: 0 auto;
+    margin-top: 50px;
     width: calc(100vw - 80px);         /* Roztáhne tabulku téměř přes celou obrazovku s 20px okrajem vlevo a vpravo */
 }
 
@@ -144,7 +144,6 @@ th, td {
 }
 
 .Galerie {
-    margin: 100px auto 0 auto; /* Horní odsazení 50px */
     padding: 0 20px;                   /* Okraje galerie od okrajů obrazovky */
     max-width: none;
     width: 100vw;
