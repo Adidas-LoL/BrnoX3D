@@ -23,8 +23,8 @@
         <h2 id="Title">BrnoX3D</h2>
         
         <a href="./image/Sidebar/radost.png" target="_blank"><img src="./image/Sidebar/radost.png" id="sideimage"></a>
-        <p class="place-btn" onclick="openSidebarWithInfo('Radost', 'Brňenská Káznice, vystavena jako vězení byla poprvé užita jako sirotčinec. vystavena roku 1778 její originální důvod výstavby bylo nařízení dvorského dekretu aby morava měla káznicy. Roku 1784 byl sirotčinec zrušen a káznice byla užita jako věznice pro nezletilé a byla užívána jako věznice až do sametové revoluce. Mezi roky 2006-2018 byla budova prázdná a neužitá ale už od roku 2006 byly plány ji přestavět na Divadlo, roku 2012 vyl zorganizován pouliční ghettofest v blízkostvi káznice která se stala pro ghettofest zázemí pro eventy což zvýšilo zájem o budovu. Od roku 2018 je káznice užívaná jako dnes, stávající se cejlským centrem kultůry.')"> Popisek</p>
-        <a class="place-btn" target="_blank" href="https://divadlo-radost.cz/">Odkaz na stránky</a>
+        <p class="place-btn" onclick="openSidebarWithInfo('Divadlo Radost', 'Divadlo RadostDivadlo Radost bylo první kino Orania, po silném poškození při druhé světové válce byla budova přestavena na Divadlo radost a od roku 1949 se zde pravidelné představení. \nHlavní specialita divadla jsou loutkové hry ale je zde i pár hraných her, hry jsou hrané pro všechny věkové kategorie takže se může kulturně vzdělat kdokoliv.\nVe všech prostorech divadla jsou vystavovány loutky z produkce divadla za celou svoji životnost')"> Popisek</p>
+        <a class="place-btn" target="_blank" href="https://divadlo-radost.cz/" id="odkaz">Odkaz na stránky</a>
         <p id="place-info"></p>
     </div>
     </div>
@@ -37,7 +37,8 @@
     // Funkce pro otevření panelu s informacemi o místě
     function openSidebarWithInfo(title, description) {
         placeInfo.innerHTML = `<strong>${title}</strong><br>${description}`;
-        sidebar.classList.add("open"); // Otevření panelu
-    }
+
+        sidebar.classList.add("open");
+    };
 </script>
 </html>

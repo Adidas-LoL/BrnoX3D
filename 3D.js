@@ -113,13 +113,13 @@ function main() {
       camera.updateProjectionMatrix();
     }
 
-    function followCamera(obj){
+    /*function followCamera(obj){
       camera.position.x = obj.position.x + 5;
       camera.position.y = obj.position.y + 20;
       camera.position.z = obj.position.z + 10;
       camera.lookAt(obj.position);
       //console.log("test");
-    };
+    };*/
     
     //map-----------
     //--------------
@@ -158,7 +158,7 @@ function main() {
   let radost = false;
   let albert = false;
   let kaznice = false;
-
+  let teplarny = false;
 
   //----------------------------------------------------------
   class Checkpoint {
@@ -203,7 +203,7 @@ function main() {
     }
   }
 
-
+//radost
   let checkpoint1 = new Checkpoint(-13, 0, -27, () => {
     radost = true;
     //console.log("Changed A")
@@ -211,14 +211,16 @@ function main() {
     radost = false;
     if (E) E.visible = false;
   });
-  
+
+//albert  
   let checkpoint2 = new Checkpoint(80, 0, -57, () => {
     albert = true;
     //console.log("Changed B")
   }, () => {
     albert = false;
   });
-  
+
+//kaznice  
   let checkpoint3 = new Checkpoint(28, 0, -50, () => {
     kaznice = true;
     //console.log("Changed C")
@@ -226,17 +228,43 @@ function main() {
     kaznice = false;
   });
 
+//teplarna
+  let checkpoint4 = new Checkpoint(-10, 0, 30, () => {
+    teplarny = true;
+  }, () => {
+    teplarny = false;
+  });
 
   //loads content to the sidebar
-  function loadcontent(){
-    let img = document.getElementById("sideimage");
-    let Title = document.getElementById("Title");
-    //console.log(img);
-    if(img !== null) {
-    if (radost === true){Title.textContent = "Divadlo Radost"; img.src = "./image/Sidebar/radost.png"};
-    if (albert === true){Title.textContent = "Supermarket Albert";img.src = "./image/Sidebar/albert.png"};
-    if (kaznice === true){Title.textContent = "Cejl kaznice";img.src = "./image/Sidebar/kaznice.png"};
-  }};
+  function loadcontent() {
+  const img = document.getElementById("sideimage");
+  const Title = document.getElementById("Title");
+  const placeInfo = document.getElementById("place-info");
+  const link = document.getElementById("odkaz");
+  if (!img || !Title || !placeInfo) return;
+
+  if (radost === true) {
+    Title.textContent = "Divadlo Radost";
+    img.src = "./image/Sidebar/radost.png";
+    placeInfo.innerHTML = `<strong>Divadlo Radost</strong><br>Divadlo Radost bylo první kino Orania, po silném poškození při druhé světové válce byla budova přestavena na Divadlo radost a od roku 1949 se zde pravidelné představení. \nHlavní specialita divadla jsou loutkové hry ale je zde i pár hraných her, hry jsou hrané pro všechny věkové kategorie takže se může kulturně vzdělat kdokoliv.\nVe všech prostorech divadla jsou vystavovány loutky z produkce divadla za celou svoji životnost.`;
+    link.href = "https://divadlo-radost.cz/";
+  } else if (albert === true) {
+    Title.textContent = "Supermarket Albert";
+    img.src = "./image/Sidebar/albert.png";
+    placeInfo.innerHTML = `<strong>Supermarket Albert</strong><br>Typický supermarket s nabídkou potravin a domácích potřeb. Nachází se v srdci Cejlu.`;
+    link.href = "https://www.ualbertu.cz/obchodni-centrum/detail/190/";
+  } else if (kaznice === true) {
+    Title.textContent = "Káznice";
+    img.src = "./image/Sidebar/kaznice.png";
+    placeInfo.innerHTML = `<strong>Káznice</strong><br>Brňenská Káznice, vystavena jako vězení byla poprvé užita jako sirotčinec.\nVystavěna roku 1778 její originální důvod výstavby bylo nařízení dvorského dekretu aby morava měla káznici.\nRoku 1784 byl sirotčinec zrušen a káznice byla užita jako věznice pro nezletilé a byla užívána jako věznice až do sametové revoluce.\nMezi roky 2006-2018 byla budova prázdná a neužitá ale už od roku 2006 byly plány ji přestavět na Divadlo, roku 2012 vyl zorganizován pouliční ghettofest v blízkostvi káznice která se stala pro ghettofest zázemí pro eventy což zvýšilo zájem o budovu.\nOd roku 2018 je káznice užívaná jako dnes, stávající se cejlským centrem kultůry.`;
+    link.href = "https://kaznice.art/";
+  } else if (teplarny === true) {
+    Title.textContent = "Teplárny Brno";
+    img.src = "./image/Sidebar/kaznice.png";
+    placeInfo.innerHTML = `<strong>Káznice</strong><br>Téměř sto letá, Plynná Teplárna dodávající teplo a energii po kraji.\nCo více si může člověk přát?`;
+    link.href = "https://www.teplarny.cz/";
+  }
+}
   //only one cone----------------
   /*const coneGeometry = new THREE.ConeGeometry(5, 30, 32); // (polomer zakladu, vyska, segmenty)
   const coneMaterial = new THREE.MeshBasicMaterial({ color: 0xffff00, transparent: true, opacity: 0.5 });
