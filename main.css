@@ -122,29 +122,37 @@ body {
 
 /*Galerie ---------------------------*/
 .img {
-    max-height: 250px;
-    max-width: 300px;
+    width: 100%;              /* Obrázek vyplní celý <td> */
+    height: 100%;             /* Výška se řídí výškou buňky */
+    object-fit: cover;        /* Zachová poměr a ořízne přebytek */
+    border-radius: 10px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    max-height: none;         /* Zruší původní omezení výšky */
+    max-width: none;          /* Zruší původní omezení šířky */
 }
+
 table {
-    border-collapse: collapse; /* Sloučí hranice buněk */
-    margin: 0 auto; /* Zarovná tabulku na střed */
-   
+    border-collapse: collapse;         /* Sloučí hranice buněk */
+    margin: 0 auto;
+    width: calc(100vw - 40px);         /* Roztáhne tabulku téměř přes celou obrazovku s 20px okrajem vlevo a vpravo */
 }
 
 th, td {
-    padding: 5px; /* Odsazení v buňkách */
-    text-align: left; /* Zarovnání textu vlevo */
+    padding: 5px;                      /* Malé mezery mezi obrázky */
+    text-align: left;
+    height: 250px;                     /* Zajištění stejné výšky obrázků */
 }
+
 .Galerie {
-   
-    max-width: 1000px;
-    width: 90%;
-    align-self: center;
+    margin: 0 auto;
+    padding: 0 20px;                   /* Okraje galerie od okrajů obrazovky */
+    max-width: none;
+    width: 100vw;
 }
 
 .Galerie img {
     width: 100%;
-    max-height: 250px;
+    height: 100%;
     object-fit: cover;
     border-radius: 10px;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -156,8 +164,9 @@ th, td {
 }
 
 .Galerie td {
-    padding: 15px;
+    padding: 5px;
 }
+
 
 /* Responsivita */
 @media (max-width: 768px) {
