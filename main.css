@@ -136,7 +136,7 @@ th, td {
     text-align: left; /* Zarovnání textu vlevo */
 }
 .Galerie {
-    margin: 100px auto;
+   
     max-width: 1000px;
     width: 90%;
     align-self: center;
