@@ -23,9 +23,9 @@
         <h2 id="Title">BrnoX3D</h2>
         
         <a href="./image/Sidebar/radost.png" target="_blank"><img src="./image/Sidebar/radost.png" id="sideimage"></a>
-        <p class="place-btn" onclick="openSidebarWithInfo('Divadlo Radost', 'Divadlo RadostDivadlo Radost bylo první kino Orania, po silném poškození při druhé světové válce byla budova přestavena na Divadlo radost a od roku 1949 se zde pravidelné představení. \nHlavní specialita divadla jsou loutkové hry ale je zde i pár hraných her, hry jsou hrané pro všechny věkové kategorie takže se může kulturně vzdělat kdokoliv.\nVe všech prostorech divadla jsou vystavovány loutky z produkce divadla za celou svoji životnost')"> Popisek</p>
+        <p class="place-btn" onclick="openSidebarWithInfo()"> Popisek</p>
         <a class="place-btn" target="_blank" href="https://divadlo-radost.cz/" id="odkaz">Odkaz na stránky</a>
-        <p id="place-info"></p>
+        <p id="place-info">Divadlo Radost<br> RadostDivadlo Radost bylo první kino Orania, po silném poškození při druhé světové válce byla budova přestavena na Divadlo radost a od roku 1949 se zde pravidelné představení. <br>Hlavní specialita divadla jsou loutkové hry ale je zde i pár hraných her, hry jsou hrané pro všechny věkové kategorie takže se může kulturně vzdělat kdokoliv.<br>Ve všech prostorech divadla jsou vystavovány loutky z produkce divadla za celou svoji životnost.</p>
     </div>
     </div>
     <canvas id="c"></canvas>
@@ -33,12 +33,14 @@
 <script type="module" src="3D.js"></script>
 <script>
     const placeInfo = document.getElementById("place-info");
-    const sidebar = document.getElementById("sidebar");
-    // Funkce pro otevření panelu s informacemi o místě
-    function openSidebarWithInfo(title, description) {
-        placeInfo.innerHTML = `<strong>${title}</strong><br>${description}`;
 
-        sidebar.classList.add("open");
-    };
+    // Funkce pro otevření panelu s informacemi o místě
+    function openSidebarWithInfo() {
+            if (placeInfo.style.display === "none" || placeInfo.style.display === "") {
+                placeInfo.style.display = "block";
+            } else {
+                placeInfo.style.display = "none";
+            }
+        }
 </script>
 </html>

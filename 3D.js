@@ -159,7 +159,8 @@ function main() {
   let albert = false;
   let kaznice = false;
   let teplarny = false;
-
+  let park = false;
+  let muzeum = false;
   //----------------------------------------------------------
   class Checkpoint {
     constructor(x, y, z, onCollide, onExit) {
@@ -229,12 +230,23 @@ function main() {
   });
 
 //teplarna
-  let checkpoint4 = new Checkpoint(-10, 0, 30, () => {
+  let checkpoint4 = new Checkpoint(20, 0, 0, () => {
     teplarny = true;
   }, () => {
     teplarny = false;
   });
-
+//park
+  let checkpoint5 = new Checkpoint(20, 0, -75, () => {
+    park = true;
+  }, () => {
+    park = false;
+  });
+//muzeum
+  let checkpoint6 = new Checkpoint(20, 0, -75, () => {
+    muzeum = true;
+  }, () => {
+    muzeum = false;
+  });
   //loads content to the sidebar
   function loadcontent() {
   const img = document.getElementById("sideimage");
@@ -260,9 +272,19 @@ function main() {
     link.href = "https://kaznice.art/";
   } else if (teplarny === true) {
     Title.textContent = "Teplárny Brno";
-    img.src = "./image/Sidebar/kaznice.png";
-    placeInfo.innerHTML = `<strong>Káznice</strong><br>Téměř sto letá, Plynná Teplárna dodávající teplo a energii po kraji.\nCo více si může člověk přát?`;
-    link.href = "https://www.teplarny.cz/";
+    img.src = "./image/Sidebar/teplarna.png";
+    placeInfo.innerHTML = `<strong>Teplárna</strong><br>Téměř sto letá, Plynná Teplárna dodávající teplo a energii po kraji.\nCo více si může člověk přát?`;
+    link.href = "https://openhousebrno.cz/cs/spitalka-teplarny-brno";
+  } else if (park === true) {
+    Title.textContent = "Park Hvězdička";
+    img.src = "./image/Sidebar/hvezdicka.png";
+    placeInfo.innerHTML = `<strong>Park Hvězdička</strong><br>Park byl vybudován roku 2015 za účelem revitalizace brna.\nMotivem parku je náměstíčko, z něhož vycházejí čtyři chodníky, které místo rozdělují na kvadranty se specifickým využitím (sport, odpočinek na pobytových trávnících, přístupová část). \nV poslední části bylo vybudováno nízkoprahové centrum pro děti a mládež.`;
+    link.href = "https://openhousebrno.cz/cs/drom-romske-stredisko-a-hvezdicka-park-eugena-horvatha";
+  } else if (muzeum === true) {
+    Title.textContent = "Muzeum romské kultury";
+    img.src = "./image/Sidebar/muzeum_romske_kultury.png";
+    placeInfo.innerHTML = `<strong>Muzeum romské kultury</strong><br>Zalozěno roku 1991 neziskovou organizací iniciativa romských intelektuálů s myšlenkou dokumentace kultury Romů a Sintů po celém světě.\nSbírka obsahuje více než 28000 předmětů.\nMuzeum se originálně snažilo budovat sbírkové fondy na kolekci dokumentů kultury a dějin romů.\nDnes spravuje fondy tradičních řemesel a profesí, typů obydlí, vybavení interiéru, oděvu a šperku, výtvarného umění, písemného materiálu, plakátů a pozvánek, audio, foto a videodokumentace, knihovny, ohlasů kultury Romů.`;
+    link.href = "https://www.rommuz.cz/cs/";
   }
 }
   //only one cone----------------
@@ -285,8 +307,7 @@ function main() {
     //car.position.y = 0.04;
     E.position.y = 10;
     E.visible = false;
-		scene.add( E )
-    
+		scene.add( E );
     })};
 
     // Spin E towards heilcopter
@@ -405,6 +426,9 @@ function main() {
     checkpoint1.checkCollision(car);
     checkpoint2.checkCollision(car);
     checkpoint3.checkCollision(car);
+    checkpoint4.checkCollision(car);
+    checkpoint5.checkCollision(car);
+    checkpoint6.checkCollision(car);
     if(E!==null && E.visible && car)  {Espin(E, car)}; //spin E towards helicopter
     //console.log(car.position)
   }
