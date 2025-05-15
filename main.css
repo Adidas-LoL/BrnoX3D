@@ -194,7 +194,8 @@ body {
     text-align: center;
     color: white;
     padding: 40px;
-  }
+    overflow-x: hidden;
+ }
     
   .container {
     display: flex;
