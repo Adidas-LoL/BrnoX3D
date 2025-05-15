@@ -245,3 +245,21 @@ body {
     opacity: 1;
     max-height: 200px;
   }
+
+  .projekt {
+    display: block;
+    position: inherit;
+    width: 100%;
+    background-color: #24245f;
+    font-size: 16px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    padding: 10px;
+  }
+
+  .projekt a {
+    color: white;
+  }
+  .projekt a:hover {
+    color: aqua;
+  }
