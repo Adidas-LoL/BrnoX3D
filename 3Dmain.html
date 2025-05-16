@@ -11,6 +11,11 @@
     <script type="importmap"></script>
 </head>
 <body>
+    <div id="loading-screen">
+        <div class="spinner"></div>
+        <p>Načítání...</p>
+    </div>
+
     <div id="UI">
     <!-- Tlačítka míst mimo panel -->
 
@@ -42,5 +47,8 @@
                 placeInfo.style.display = "none";
             }
         }
+    window.addEventListener('load', () => {
+            document.getElementById('loading-screen').style.display = 'none';
+            });
 </script>
 </html>

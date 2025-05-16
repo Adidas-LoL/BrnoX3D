@@ -1,38 +1,53 @@
 body {
-    width: 100vh;
-    height: 100vw;
+    width: 100vw;
+    height: 100vh;
     overflow-y: hidden;
+    margin: 0;
 }
+
+/* Načítací obrazovka */
+#loading-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+}
+
+.spinner {
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #3498db;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Zbytek tvého CSS */
 #c {
     position: absolute;
-    /*transform: translateX(-50%);
-    left: 50vw;*/
     height: 100%;
     display: block;
     width: 100%;
     z-index: 1;
-   
 }
-/*#resButton {
-    text-align: right;
-}
-
-#resButton button {
-    font-size: 25px;
-    color: #fff;
-    position: absolute;
-    z-index: 2;
-    height: 50px;
-    background-color: #1b1a1d;
-    box-shadow: 5px, 10px;
-    border-radius: 15px;
-}*/
 
 /* Boční panel */
 #UI {
     z-index: 1000;
     position: relative;
 }
+
 .sidebar {
     width: 300px;
     height: 100vh;
@@ -44,12 +59,14 @@ body {
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
     padding: 20px;
 }
+
 #sideimage {
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
     justify-content: center;
     width: 100%;
     overflow-x: hidden;
 }
+
 /* Tlačítko pro vysunutí */
 .toggle-btn {
     position: absolute;
@@ -109,6 +126,7 @@ body {
 .place-btn:hover {
     background: #0056b3;
 }
+
 #place-info {
     display: none;
     margin: 10px 0;
