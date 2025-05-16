@@ -33,7 +33,7 @@
     <img src="image\parralax\6.png" id="para6" data-speed="1.4">
     <!--Mapa------------------------------------------------------------------------->
     <div class="Mapa" id="Mapa">
-        <a href="3Dmain.html" ><img src="./image/mapa.png" id="mapImage"></a>
+        <a href="3Dmain.html" target="_blank" ><img src="./image/mapa.png" id="mapImage"></a>
     </div>
 </section>
 
@@ -57,8 +57,14 @@ document.getElementById('mapImage').addEventListener('click', function(event) {
     const centerX = rect.width / 2;
     const centerY = rect.height / 2;
 
-    const relativeX = Math.round(clickX - centerX);
-    const relativeY = Math.round(centerY - clickY); // y osa obráceně (nahoru je plus)
+    let relativeX = Math.round(clickX - centerX);
+    let relativeY = Math.round(clickY - centerY);
+
+    const mapwidth = 455
+    const mapwidth3D = 127;
+
+    relativeX = relativeX / mapwidth * mapwidth3D;
+    relativeY = relativeY / mapwidth * mapwidth3D;
     window.location.href = `3Dmain.html?x=${relativeX}&y=${relativeY}`;
 });
 </script>
