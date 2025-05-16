@@ -268,18 +268,17 @@ body {
   }
 /* Kontakty */
 .kontakt {
-  background-color: white;
-  padding: 30px;
+  background-color: #222;
+  color: white;
   text-align: center;
-  border-top: 2px solid #ccc;
-}
-
-.kontakt h2 {
-  margin-top: 0;
+  padding: 40px 20px;
+  width: 100%;
+  position: absolute;
+  bottom: 0;
 }
 
 .kontakt a {
-  color: #007BFF;
+  color: #00bfff;
   text-decoration: none;
 }
 
