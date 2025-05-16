@@ -136,7 +136,9 @@ body {
 
 table {
     border-collapse: collapse;         /* Sloučí hranice buněk */
-    margin-top: 50px;
+    margin-top: 7%;
+    table-layout: auto;
+    position: relative;
     width: 100%;         /* Roztáhne tabulku téměř přes celou obrazovku s 10px okrajem vlevo a vpravo */
 }
 
@@ -144,6 +146,7 @@ th, td {
     padding: 10px;                      /* Malé mezery mezi obrázky */
     text-align: left;
     height: 250px;                     /* Zajištění stejné výšky obrázků */
+    overflow: visible;
 }
 
 .Galerie {
@@ -161,12 +164,76 @@ th, td {
 }
 
 .Galerie img:hover {
-    transform: scale(1.05);
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+    transform: scale(1.5);
+    box-shadow: 0 100px 160px rgba(0, 0, 0);
+    overflow: visible;
 }
 
 .Galerie td {
     padding: 5px;
+}
+
+/* WRAPPER */
+.image-hover-wrapper {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+}
+
+/* IMAGE-CONTAINER = zvětšujeme tohle celé (obrázek + text) */
+.image-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.3s ease;
+    z-index: 1;
+}
+
+/* Obrázek uvnitř */
+.image-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 10px 10px 0 0;
+    display: block;
+}
+
+.image-hover-wrapper img {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 10px;
+    transition: transform 0.3s ease;
+}
+
+/* Efekt zvětšení obrázku při hoveru */
+.image-hover-wrapper:hover img {
+    transform: scale(1.2);
+    z-index: 1;
+}
+
+/* Text uvnitř obrázku, skrytý ve výchozím stavu */
+.image-hover-wrapper .caption {
+    position:absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    color: white;
+    font-size: 16px;
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 6px 10px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    border-radius: 0 0 10px 10px;
+    z-index: 2;
+}
+
+/* Zobrazit text při hoveru */
+.image-hover-wrapper:hover .caption {
+    opacity: 1;
 }
 
 
@@ -268,7 +335,7 @@ body {
   }
 /* Kontakty */
 .kontakt {
-  background-color: white;
+  background-color: #f2f2f2;
   padding: 30px;
   text-align: center;
   border-top: 2px solid #ccc;
