@@ -26,7 +26,7 @@ section img {
     position: relative;
     top: 141px;
     z-index: 2;
-    //*overflow: hidden;*/
+    /*overflow: hidden;*/
 }
 
 .Mapa a img {
@@ -137,7 +137,7 @@ body {
 table {
     border-collapse: collapse;         /* Sloučí hranice buněk */
     margin-top: 50px;
-    width: calc(100vw - 80px);         /* Roztáhne tabulku téměř přes celou obrazovku s 20px okrajem vlevo a vpravo */
+    width: 100%;         /* Roztáhne tabulku téměř přes celou obrazovku s 10px okrajem vlevo a vpravo */
 }
 
 th, td {
@@ -149,7 +149,7 @@ th, td {
 .Galerie {
     padding: 0 20px;                   /* Okraje galerie od okrajů obrazovky */
     max-width: none;
-    width: 100vw;
+    width: 100%;
 }
 
 .Galerie img {
