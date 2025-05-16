@@ -5,7 +5,7 @@ body {
     margin: 0;
 }
 
-/* Načítací obrazovka */
+/* nacitaci obrazovka */
 #loading-screen {
     position: fixed;
     top: 0;
@@ -33,7 +33,29 @@ body {
     100% { transform: rotate(360deg); }
 }
 
-/* Zbytek tvého CSS */
+/* tlacitko pro navrat zpet */
+#back-button {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background-color: #ffffff;
+    border-radius: 5px;
+    cursor: pointer;
+    z-index: 1000;
+    border: none;
+}
+
+#back-button img {
+    width: 40px;  /* Nastavte požadovanou velikost obrázku */
+    height: auto;
+    padding-top: 5px;
+}
+
+/* Efekt při hoveru na tlačítko */
+#back-button:hover  {
+    background-color: #cfcfcf;
+}
+/* 3D canvas */
 #c {
     position: absolute;
     height: 100%;

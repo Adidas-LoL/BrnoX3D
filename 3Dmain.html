@@ -16,6 +16,8 @@
         <p>Načítání...</p>
     </div>
 
+    <button id="back-button" onclick="goBack()"><img src="image/door.png"></button>
+
     <div id="UI">
     <!-- Tlačítka míst mimo panel -->
 
@@ -47,8 +49,13 @@
                 placeInfo.style.display = "none";
             }
         }
+    //loading animation
     window.addEventListener('load', () => {
             document.getElementById('loading-screen').style.display = 'none';
-            });
+        });
+    //go back lol;
+    function goBack() {
+            window.history.back();
+        }
 </script>
 </html>
