@@ -266,3 +266,23 @@ body {
   .projekt a:hover {
     color: aqua;
   }
+/* Kontakty */
+.kontakt {
+  background-color: #f2f2f2;
+  padding: 30px;
+  text-align: center;
+  border-top: 2px solid #ccc;
+}
+
+.kontakt h2 {
+  margin-top: 0;
+}
+
+.kontakt a {
+  color: #007BFF;
+  text-decoration: none;
+}
+
+.kontakt a:hover {
+  text-decoration: underline;
+}
