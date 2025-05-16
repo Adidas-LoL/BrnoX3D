@@ -272,7 +272,9 @@ body {
   color: white;
   text-align: center;
   padding: 40px 20px;
-  width: 150%;
+  width: 100%;
+  position: absolute;
+  bottom: 0;
 }
 
 .kontakt a {
