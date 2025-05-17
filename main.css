@@ -227,7 +227,7 @@ th, td {
     padding: 6px 10px;
     opacity: 0;
     transition: opacity 0.3s ease;
-    border-radius: 0 0 10px 10px;
+    border-radius: 10px;
     z-index: 2;
 }
 
