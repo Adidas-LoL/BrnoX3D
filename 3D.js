@@ -122,6 +122,12 @@ function main() {
       //console.log("test");
     };*/
     
+  const loader = new THREE.TextureLoader();
+    loader.load('./image/sky.jpg', function(texture) {
+    texture.mapping = THREE.EquirectangularReflectionMapping;
+    scene.background = texture;
+  });
+
     //map-----------
     //--------------
     {
