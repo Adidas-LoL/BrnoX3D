@@ -43,6 +43,7 @@ function startcoords(type) {
   const y = parseInt(params.get('y')) || 0;
   if (type === "x"){return x};
   if (type === "y"){return y};
+  console.log(`Souřadnice v 3D: x = ${x}, y = ${y}`);
 }
 
 //=================================================================CANNON JS FUNCTIONS==================================================================
@@ -121,6 +122,12 @@ function main() {
       //console.log("test");
     };*/
     
+  const loader = new THREE.TextureLoader();
+    loader.load('./image/sky.jpg', function(texture) {
+    texture.mapping = THREE.EquirectangularReflectionMapping;
+    scene.background = texture;
+  });
+
     //map-----------
     //--------------
     {
@@ -333,7 +340,7 @@ function main() {
     //car.position.y = 0.04;
     car.position.y = 10;
     car.position.x = startcoords("x");
-    //car.position.z = startcoords("y");
+    car.position.z = startcoords("y");
 		scene.add( car );
     console.log("car position", car.position);
     console.log("Car rotation:", car.rotation);
